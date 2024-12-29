@@ -44,7 +44,7 @@ services:
       - app-network
 
   elasticsearch:
-    image: docker.elastic.co/elasticsearch/elasticsearch:8.12.0
+    image: docker.elastic.co/elasticsearch/elasticsearch:7.17.0
     container_name: elasticsearch
     environment:
       - discovery.type=single-node
@@ -56,7 +56,17 @@ services:
       - ./elasticsearch-data:/var/lib/elasticsearch/data
     networks:
       - app-network
-
+  kibana:
+    container_name: kibana
+    image: docker.elastic.co/kibana/kibana:7.17.0
+    environment:
+      - ELASTICSEARCH_HOSTS=http://elasticsearch:9200
+    networks:
+      - app-network
+    depends_on:
+      - elasticsearch
+    ports:
+      - 5601:5601
   redis:
     image: redis:latest
     container_name: redis
